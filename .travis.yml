@@ -11,12 +11,19 @@ matrix:
         env: TOX_ENV=py37
       - python: 3.6
         env: TOX_ENV=lint
+      - python: 3.6
+        env: TOX_ENV=check-build
 
 install:
-  - pip install tox
+  - pip install tox twine
 
 script:
-  - tox -e $TOX_ENV
+  - |
+        if [ "$TOX_ENV" == "check-build" ]; then
+            ./tests/bin/check-build
+        else
+            tox -e $TOX_ENV
+        fi
 
 after_success:
   - |
